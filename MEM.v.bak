@@ -1,0 +1,6 @@
+module MEM_stage
+(
+	input	clk,
+	input	rst,
+);
+endmodule
