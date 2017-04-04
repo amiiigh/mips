@@ -4,8 +4,10 @@ module reg_file
 	input 	rst,
 	input 	[2:0] reg_rd_addr_1,
 	output 	[15:0]reg_rd_data_1,
+
 	input 	[2:0] reg_rd_addr_2,
 	output 	[15:0]reg_rd_data_2,
+	
 	input 	[2:0] reg_wr_dest,
 	input 	[15:0]reg_wr_data,
 	input 	reg_wr_en

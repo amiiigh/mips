@@ -314,9 +314,31 @@ wire [15:0] operand_2;
 wire [15:0] reg_read_1;
 wire [15:0] reg_read_2;
 wire [2:0]  alu_cmd;
-wire [15:0] alu_res;
+wire [15:0] ex_alu_res;
 wire branch_taken;
 wire [5:0]branch_offset_imm;
+wire [2:0] mem_op_dest;
+wire [15:0]mem_alu_res;
+wire [15:0]mem_mem_data;
+
+wire [15:0] ex_store_data;
+wire [2:0] ex_op_dest;
+wire ex_mem_write_en;
+wire ex_wb_mux;
+wire ex_wb_en;
+
+wire [15:0] id_ex_store_data;
+wire [2:0] id_ex_op_dest;
+wire id_ex_mem_write_en;
+wire id_ex_wb_mux;
+wire id_ex_wb_en;
+
+wire mem_wb_mux;
+wire mem_wb_en;
+wire [2:0] reg_wr_dest;
+wire [15:0]reg_wr_data;
+wire reg_wr_en;
+
 
 assign rst = SW[1];
 assign clk = CLOCK_50;
@@ -326,24 +348,24 @@ assign HEX1 = 7'b1111111;
 
 // clock_divider cd(CLOCK_50,divided_clk);
 // clk_selector clks(divided_clk,KEY[0],SW[0],clk);
-
 IF_stage ifs(clk,rst,branch_taken,branch_offset_imm,pc,IF_ID_instr);
 SSD ssd_IF(pc,HEX7);
 
-ID_stage ids(clk,rst,IF_ID_instr,rs1_addr,rs2_addr,operand_1,operand_2,reg_read_1,reg_read_2,alu_cmd,branch_taken,branch_offset_imm);
+ID_stage ids(clk,rst,IF_ID_instr,rs1_addr,rs2_addr,operand_1,operand_2,reg_read_1,reg_read_2,alu_cmd,branch_taken,branch_offset_imm,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en);
 
-EX_stage exs(clk,rst,operand_1,operand_2,alu_cmd,alu_res);
+EX_stage exs(clk,rst,operand_1,operand_2,alu_cmd,ex_alu_res,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en);
 
-MEM_stage mems(clk,rst);
+MEM_stage mems(clk,rst,ex_alu_res,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en,mem_wb_mux,mem_wb_en,mem_op_dest,mem_alu_res,mem_mem_data);
 
-WB_stage wbs(clk,rst);
+WB_stage wbs(clk,rst,mem_alu_res,mem_mem_data,mem_op_dest,mem_wb_mux,mem_wb_en,reg_wr_dest,reg_wr_data,reg_wr_en);
 
 SSD ssd_alu(alu_res,HEX0);
 SSD ssd_op1(operand_1,HEX3);
 SSD ssd_op2(operand_2,HEX2);
 SSD ssd_cmd(alu_cmd,HEX4);
 
-reg_file rgf(clk,rst,rs1_addr,reg_read_1,rs2_addr,reg_read_2,0,0,0);
+reg_file rgf(clk,rst,rs1_addr,reg_read_1,rs2_addr,reg_read_2,reg_wr_dest,reg_wr_data,reg_wr_en);
+
 
 endmodule
 
