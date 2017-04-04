@@ -319,13 +319,13 @@ wire branch_taken;
 wire [5:0]branch_offset_imm;
 
 assign rst = SW[1];
-
+assign clk = CLOCK_50;
 assign HEX6 = 7'b1111111;
 assign HEX5 = 7'b1111111;
 assign HEX1 = 7'b1111111;
 
-clock_divider cd(CLOCK_50,divided_clk);
-clk_selector clks(divided_clk,KEY[0],SW[0],clk);
+// clock_divider cd(CLOCK_50,divided_clk);
+// clk_selector clks(divided_clk,KEY[0],SW[0],clk);
 
 IF_stage ifs(clk,rst,branch_taken,branch_offset_imm,pc,IF_ID_instr);
 SSD ssd_IF(pc,HEX7);

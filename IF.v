@@ -18,7 +18,7 @@ always @(posedge clk or posedge rst) begin
 end
 always @(pc) begin
 	case(pc)
-		8'd0:	instr <= {4'b0001,3'b000,3'b010,3'b010,3'b000};//add reg1 + reg2
+		8'd0:	instr <= {4'b0001,3'b000,3'b010,3'b010,3'b000};//add reg2 + reg2
 		8'd1:	instr <= {4'b1001,3'b000,3'b110,6'b111101};//addi reg2 i3
 		8'd2:	instr <= {4'b0011,3'b000,3'b001,3'b000,3'b000};//and reg1 , reg0
 		8'd3:	instr <= {4'b1100,3'b000,3'b000,6'b111101};//or reg1,reg0

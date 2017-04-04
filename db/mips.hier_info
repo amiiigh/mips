@@ -1,12 +1,12 @@
 |mips
 CLOCK_27 => ~NO_FANOUT~
-CLOCK_50 => CLOCK_50.IN1
+CLOCK_50 => clk.IN6
 EXT_CLOCK => ~NO_FANOUT~
-KEY[0] => KEY[0].IN1
+KEY[0] => ~NO_FANOUT~
 KEY[1] => ~NO_FANOUT~
 KEY[2] => ~NO_FANOUT~
 KEY[3] => ~NO_FANOUT~
-SW[0] => SW[0].IN1
+SW[0] => ~NO_FANOUT~
 SW[1] => rst.IN6
 SW[2] => ~NO_FANOUT~
 SW[3] => ~NO_FANOUT~
@@ -422,43 +422,6 @@ GPIO_1[32] <> <UNC>
 GPIO_1[33] <> <UNC>
 GPIO_1[34] <> <UNC>
 GPIO_1[35] <> <UNC>
-
-
-|mips|clock_divider:cd
-input_clock => counter[0].CLK
-input_clock => counter[1].CLK
-input_clock => counter[2].CLK
-input_clock => counter[3].CLK
-input_clock => counter[4].CLK
-input_clock => counter[5].CLK
-input_clock => counter[6].CLK
-input_clock => counter[7].CLK
-input_clock => counter[8].CLK
-input_clock => counter[9].CLK
-input_clock => counter[10].CLK
-input_clock => counter[11].CLK
-input_clock => counter[12].CLK
-input_clock => counter[13].CLK
-input_clock => counter[14].CLK
-input_clock => counter[15].CLK
-input_clock => counter[16].CLK
-input_clock => counter[17].CLK
-input_clock => counter[18].CLK
-input_clock => counter[19].CLK
-input_clock => counter[20].CLK
-input_clock => counter[21].CLK
-input_clock => counter[22].CLK
-input_clock => counter[23].CLK
-input_clock => counter[24].CLK
-input_clock => counter[25].CLK
-divided_clock <= counter[23].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|mips|clk_selector:clks
-dclk => clk.DATAB
-kclk => clk.DATAA
-clk_type => clk.OUTPUTSELECT
-clk <= clk.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |mips|IF_stage:ifs
