@@ -17,8 +17,9 @@ always @(posedge clk or posedge rst) begin
 	end
 	else begin
 		{wb_data,wb_dest,regfile_en} <= 0;
-		if (wb_en) begin
+		if (wb_en == 1) begin
 			wb_dest <= mem_wb_dest;
+			regfile_en <= wb_en;
 			if (alu_bar_mem == 0)begin
 				wb_data <= alu_res;
 			end

@@ -7,7 +7,7 @@ module IF_stage
 	output	reg [7:0]	pc,
 	output 	reg [15:0] 	instr
 );
-
+parameter NOP = 16'b0;
 always @(posedge clk or posedge rst) begin
 	if (rst) begin
 		pc <= 8'b0;	
@@ -18,16 +18,16 @@ always @(posedge clk or posedge rst) begin
 end
 always @(pc) begin
 	case(pc)
-		8'd0:	instr <= {4'b0001,3'b000,3'b010,3'b010,3'b000};//add reg2 + reg2
-		8'd1:	instr <= {4'b1001,3'b000,3'b110,6'b111101};//addi reg2 i3
-		8'd2:	instr <= {4'b0011,3'b000,3'b001,3'b000,3'b000};//and reg1 , reg0
-		8'd3:	instr <= {4'b1100,3'b000,3'b000,6'b111101};//or reg1,reg0
-		8'd4:	instr <= {4'b0101,3'b000,3'b001,3'b001,3'b000};//xor reg1,reg1
-		8'd5:	instr <= {4'b0110,3'b000,3'b010,3'b001,3'b000};//sl reg2
-		8'd6:	instr <= {4'b0111,3'b000,3'b010,3'b001,3'b000};//sr reg2
-		8'd7:	instr <= {4'b1000,3'b000,3'b010,3'b001,3'b000};//sru
-		8'd8:	instr <= {4'b0000,3'b000,3'b000,3'b000,3'b000};
-		8'd9:	instr <= {4'b0000,3'b000,3'b000,3'b000,3'b000};
+		8'd0:	instr <= {4'b1011,3'b011,3'b010,6'b000000};
+		8'd1:	instr <= NOP;
+		8'd2:	instr <= NOP;
+		8'd3:	instr <= NOP;
+		8'd4:	instr <= NOP;
+		8'd5:	instr <= NOP;
+		8'd6:	instr <= NOP;
+		8'd7:	instr <= NOP;
+		8'd8:	instr <= NOP;
+		8'd9:	instr <= {4'b1010,3'b111,3'b010,6'b000000};
 	endcase
 end
 endmodule

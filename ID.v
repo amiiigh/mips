@@ -37,6 +37,7 @@ always @(posedge clk or posedge rst) begin
 			end
 			if (opcode < 9 && opcode != NOP)begin
 				alu_cmd <= input_instr[15:12]-1;
+				id_ex_op_dest <= input_instr[11:9];
 			end
 			if(opcode == ADDI || opcode == LD || opcode == ST) begin
 				alu_cmd <= ALU_CMD_ADD;
@@ -46,7 +47,7 @@ always @(posedge clk or posedge rst) begin
 				rs2_data_out <= rs2_data_in;
 			end
 			if (opcode == LD) begin
-				id_ex_op_dest <= input_instr[8:6];
+				id_ex_op_dest <= input_instr[11:9];
 				id_ex_wb_mux <= 1;
 			end
 			if (opcode == ST) begin

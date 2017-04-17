@@ -15,7 +15,7 @@ module MEM_stage
 	output 	 [15:0]mem_mem_data
 );
 
-memory mem(clk,ex_alu_res,ex_store_data,mem_write_en,mem_mem_data);
+memory mem(clk,rst,ex_alu_res,ex_store_data,mem_write_en,mem_mem_data);
 always @(posedge clk or posedge rst) begin
 	if (rst) begin
 		mem_op_dest <= 0;

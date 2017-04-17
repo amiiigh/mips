@@ -363,7 +363,7 @@ SSD ssd_alu(alu_res,HEX0);
 SSD ssd_op1(operand_1,HEX3);
 SSD ssd_op2(operand_2,HEX2);
 SSD ssd_cmd(alu_cmd,HEX4);
-
+wire [2:0] temp;
 reg_file rgf(clk,rst,rs1_addr,reg_read_1,rs2_addr,reg_read_2,reg_wr_dest,reg_wr_data,reg_wr_en);
 
 

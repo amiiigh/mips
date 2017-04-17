@@ -15,9 +15,8 @@ module reg_file
 	reg [15:0] registers [7:0];
 	assign reg_rd_data_1 = registers [reg_rd_addr_1];
 	assign reg_rd_data_2 = registers [reg_rd_addr_2];
-
-	integer i;
 	always @(posedge clk or posedge rst) begin
+
 		if (rst) begin
 			registers[0] <= 15'd0; 
 			registers[1] <= 15'd1;

@@ -5,7 +5,7 @@ module EX_stage
 	input 	[15:0]rs_1,
 	input 	[15:0]rs_2,
 	input 	[2:0] cmd,
-	output 	[15:0]alu_res,
+	output reg[15:0]alu_res,
 	input [15:0] id_ex_store_data,
 	input [2:0] id_ex_op_dest,
 	input id_ex_mem_write_en,
@@ -17,7 +17,7 @@ module EX_stage
 	output reg ex_wb_mux,
 	output reg ex_wb_en
 );
-
+wire [15:0]alu_res_temp;
 always @(posedge clk or posedge rst) begin
 	if (rst) begin
 		ex_store_data <= 0;
@@ -27,6 +27,7 @@ always @(posedge clk or posedge rst) begin
 		ex_wb_en <= 0;
 	end
 	else begin
+		alu_res <= alu_res_temp;
 		ex_store_data <= id_ex_store_data;
 		ex_op_dest <= id_ex_op_dest;
 		ex_mem_write_en <= id_ex_mem_write_en;
@@ -35,5 +36,5 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-ALU alu(rs_1,rs_2,cmd,alu_res);
+ALU alu(rs_1,rs_2,cmd,alu_res_temp);
 endmodule
