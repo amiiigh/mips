@@ -2,6 +2,7 @@ module ID_stage
 (
 	input	clk,
 	input	rst,
+	input 	stall,
 	input 	[15:0]input_instr,
 	output 	[2:0]rs1_addr,
 	output 	[2:0]rs2_addr,
@@ -30,7 +31,7 @@ always @(posedge clk or posedge rst) begin
 	end
 	else begin
 		{alu_cmd, rs1_data_out, rs2_data_out,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en} <=0;
-		if (!branch_taken )begin
+		if (!branch_taken && !stall)begin
 			rs1_data_out <= rs1_data_in;
 			if(opcode != NOP && opcode != BZ && opcode != ST) begin
 				id_ex_wb_en <= 1;
@@ -42,12 +43,12 @@ always @(posedge clk or posedge rst) begin
 			if(opcode == ADDI || opcode == LD || opcode == ST) begin
 				alu_cmd <= ALU_CMD_ADD;
 				rs2_data_out <= $signed(branch_offset_imm);
+				id_ex_op_dest <= input_instr[11:9];
 			end
 			else begin
 				rs2_data_out <= rs2_data_in;
 			end
 			if (opcode == LD) begin
-				id_ex_op_dest <= input_instr[11:9];
 				id_ex_wb_mux <= 1;
 			end
 			if (opcode == ST) begin

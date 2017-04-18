@@ -293,7 +293,7 @@ GND                          : C18       : gnd    :                   :         
 ENET_DATA[10]                : C19       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 VCCIO4                       : C20       : power  :                   : 3.3V    : 4         :                
 GND*                         : C21       :        :                   :         : 4         :                
-TD_CLK27                     : C22       : input  : 3.3-V LVTTL       :         : 4         : N              
+GND*                         : C22       :        :                   :         : 4         :                
 GND*                         : C23       :        :                   :         : 4         :                
 PS2_DAT                      : C24       : input  : 3.3-V LVTTL       :         : 5         : Y              
 UART_RXD                     : C25       : input  : 3.3-V LVTTL       :         : 5         : Y              
@@ -318,7 +318,7 @@ ENET_DATA[0]                 : D17       : bidir  : 3.3-V LVTTL       :         
 ENET_DATA[15]                : D18       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 ENET_DATA[11]                : D19       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GND*                         : D20       :        :                   :         : 4         :                
-GND*                         : D21       :        :                   :         : 4         :                
+TD_CLK27                     : D21       : input  : 3.3-V LVTTL       :         : 4         : N              
 VCCIO4                       : D22       : power  :                   : 3.3V    : 4         :                
 GND*                         : D23       :        :                   :         : 5         :                
 GND                          : D24       : gnd    :                   :         :           :                
@@ -388,7 +388,7 @@ TD_DATA[4]                   : G9        : input  : 3.3-V LVTTL       :         
 VGA_R[2]                     : G10       : output : 3.3-V LVTTL       :         : 3         : Y              
 VGA_G[6]                     : G11       : output : 3.3-V LVTTL       :         : 3         : Y              
 VGA_B[3]                     : G12       : output : 3.3-V LVTTL       :         : 3         : Y              
-GND*                         : G13       :        :                   :         : 4         :                
+SD_WP_N                      : G13       : input  : 3.3-V LVTTL       :         : 4         : N              
 GND*                         : G14       :        :                   :         : 4         :                
 GND*                         : G15       :        :                   :         : 4         :                
 GND*                         : G16       :        :                   :         : 4         :                
@@ -672,7 +672,7 @@ DRAM_DQ[7]                   : V7        : bidir  : 3.3-V LVTTL       :         
 VCCIO1                       : V8        : power  :                   : 3.3V    : 1         :                
 SRAM_ADDR[11]                : V9        : output : 3.3-V LVTTL       :         : 8         : Y              
 SRAM_ADDR[10]                : V10       : output : 3.3-V LVTTL       :         : 8         : Y              
-SD_WP_N                      : V11       : input  : 3.3-V LVTTL       :         : 8         : N              
+GND*                         : V11       :        :                   :         : 8         :                
 VCCIO8                       : V12       : power  :                   : 3.3V    : 8         :                
 HEX0[6]                      : V13       : output : 3.3-V LVTTL       :         : 8         : Y              
 HEX0[5]                      : V14       : output : 3.3-V LVTTL       :         : 8         : Y              

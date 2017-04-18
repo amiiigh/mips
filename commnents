@@ -1,0 +1,7 @@
+for forwarding unit{
+	
+- ex , mem ,wb needs to be changed
+- one stall needs to add 
+- one switch for switching between forwarding and hazard 
+
+}

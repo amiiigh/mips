@@ -339,6 +339,8 @@ wire [2:0] reg_wr_dest;
 wire [15:0]reg_wr_data;
 wire reg_wr_en;
 
+wire stall;
+
 
 assign rst = SW[1];
 assign clk = CLOCK_50;
@@ -348,10 +350,9 @@ assign HEX1 = 7'b1111111;
 
 // clock_divider cd(CLOCK_50,divided_clk);
 // clk_selector clks(divided_clk,KEY[0],SW[0],clk);
-IF_stage ifs(clk,rst,branch_taken,branch_offset_imm,pc,IF_ID_instr);
-SSD ssd_IF(pc,HEX7);
+IF_stage ifs(clk,rst,stall,branch_taken,branch_offset_imm,pc,IF_ID_instr);
 
-ID_stage ids(clk,rst,IF_ID_instr,rs1_addr,rs2_addr,operand_1,operand_2,reg_read_1,reg_read_2,alu_cmd,branch_taken,branch_offset_imm,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en);
+ID_stage ids(clk,rst,stall,IF_ID_instr,rs1_addr,rs2_addr,operand_1,operand_2,reg_read_1,reg_read_2,alu_cmd,branch_taken,branch_offset_imm,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en);
 
 EX_stage exs(clk,rst,operand_1,operand_2,alu_cmd,ex_alu_res,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en);
 
@@ -359,6 +360,9 @@ MEM_stage mems(clk,rst,ex_alu_res,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb
 
 WB_stage wbs(clk,rst,mem_alu_res,mem_mem_data,mem_op_dest,mem_wb_mux,mem_wb_en,reg_wr_dest,reg_wr_data,reg_wr_en);
 
+hazard_detector hzd(clk,rst,rs1_addr,rs2_addr,id_ex_op_dest,ex_op_dest,mem_op_dest,reg_wr_dest,stall);
+
+SSD ssd_IF(pc,HEX7);
 SSD ssd_alu(alu_res,HEX0);
 SSD ssd_op1(operand_1,HEX3);
 SSD ssd_op2(operand_2,HEX2);
