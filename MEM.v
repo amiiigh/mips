@@ -12,7 +12,7 @@ module MEM_stage
 	output 	reg mem_wb_en,
 	output 	reg [2:0] mem_op_dest,
 	output 	reg [15:0]mem_alu_res,
-	output 	 reg [15:0]mem_mem_data
+	output 	reg [15:0]mem_mem_data
 );
 wire [15:0]mem_data_temp;
 memory mem(clk,rst,ex_alu_res,ex_store_data,mem_write_en,mem_data_temp);

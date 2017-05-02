@@ -18,23 +18,31 @@ module ID_stage
 	output 	reg [2:0] id_ex_op_dest,
 	output 	reg id_ex_mem_write_en,
 	output 	reg id_ex_wb_mux,
-	output 	reg id_ex_wb_en
-
+	output 	reg id_ex_wb_en,
+	output 	reg [2:0] fsrc1,
+	output 	reg [2:0] fsrc2
 );
 
 parameter NOP = 0,ADDI=9,LD=10,ST=11,BZ=12;
 parameter ALU_CMD_ADD = 0;
 wire [3:0] opcode;
+reg temp_instr;
 always @(posedge clk or posedge rst) begin
 	if (rst) begin
-		{alu_cmd, rs1_data_out, rs2_data_out,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en} <=0;
+		{alu_cmd, rs1_data_out, rs2_data_out,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en,fsrc1,fsrc2} <=0;
 	end
 	else begin
-		{alu_cmd, rs1_data_out, rs2_data_out,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en} <=0;
+		temp_instr <= input_instr;
+		{alu_cmd, rs1_data_out, rs2_data_out,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en,fsrc2,fsrc1} <=0;
 		if (!branch_taken && !stall)begin
+			fsrc1 <= rs1_addr;
+			fsrc2 <= rs2_addr;
 			rs1_data_out <= rs1_data_in;
 			if(opcode != NOP && opcode != BZ && opcode != ST) begin
 				id_ex_wb_en <= 1;
+			end
+			if ( opcode >=9 || opcode == NOP)begin
+				fsrc2 <= 0;
 			end
 			if (opcode < 9 && opcode != NOP)begin
 				alu_cmd <= input_instr[15:12]-1;
@@ -63,6 +71,5 @@ assign opcode = input_instr[15:12];
 assign branch_offset_imm = input_instr[5:0];
 assign branch_taken = (opcode == BZ) && (rs1_data_in == 0);
 assign rs1_addr = input_instr[8:6];
-// injaro bepa
 assign rs2_addr = (opcode == ST) ? input_instr[11:9] : input_instr[5:3];
 endmodule
