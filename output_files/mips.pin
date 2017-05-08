@@ -220,7 +220,7 @@ FL_DQ[7]                     : AE21      : bidir  : 3.3-V LVTTL       :         
 LEDG[0]                      : AE22      : output : 3.3-V LVTTL       :         : 7         : Y              
 LEDR[0]                      : AE23      : output : 3.3-V LVTTL       :         : 7         : Y              
 ~LVDS150p/nCEO~              : AE24      : output : 3.3-V LVTTL       :         : 6         : N              
-SD_WP_N                      : AE25      : input  : 3.3-V LVTTL       :         : 6         : N              
+GND*                         : AE25      :        :                   :         : 6         :                
 GND                          : AE26      : gnd    :                   :         :           :                
 GND                          : AF2       : gnd    :                   :         :           :                
 VCCIO8                       : AF3       : power  :                   : 3.3V    : 8         :                
@@ -396,8 +396,8 @@ GND*                         : G17       :        :                   :         
 GND*                         : G18       :        :                   :         : 4         :                
 VCCA_PLL2                    : G19       : power  :                   : 1.2V    :           :                
 GND_PLL2                     : G20       : gnd    :                   :         :           :                
-GND*                         : G21       :        :                   :         : 5         :                
-GND*                         : G22       :        :                   :         : 5         :                
+TD_CLK27                     : G21       : input  : 3.3-V LVTTL       :         : 5         : N              
+SD_WP_N                      : G22       : input  : 3.3-V LVTTL       :         : 5         : N              
 GPIO_0[12]                   : G23       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
 GPIO_0[13]                   : G24       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
 GPIO_0[15]                   : G25       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
@@ -418,7 +418,7 @@ GND                          : H13       : gnd    :                   :         
 GND                          : H14       : gnd    :                   :         :           :                
 GND*                         : H15       :        :                   :         : 4         :                
 GND*                         : H16       :        :                   :         : 4         :                
-TD_CLK27                     : H17       : input  : 3.3-V LVTTL       :         : 4         : N              
+GND*                         : H17       :        :                   :         : 4         :                
 VCCIO4                       : H18       : power  :                   : 3.3V    : 4         :                
 GPIO_0[22]                   : H19       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
 VCCD_PLL2                    : H20       : power  :                   : 1.2V    :           :                
