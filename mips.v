@@ -340,6 +340,7 @@ wire [15:0]reg_wr_data;
 wire reg_wr_en;
 
 wire stall;
+wire stall_mem_ready;
 
 wire [15:0] frwd_res_ex;
 wire [15:0] frwd_res_mem;
@@ -352,6 +353,9 @@ wire id_op_code_is_store;
 wire [1:0] frwd_op1_mux;
 wire [1:0] frwd_op2_mux;
 wire [1:0] frwd_store_date;
+wire [1:0] frwd_bz;
+
+wire mem_ready;
 
 wire hazard_en;
 
@@ -361,6 +365,7 @@ wire [3:0] opcode_ex_mem;
 wire [3:0] opcode_mem_wb;
 
 wire [2:0] wb_op_dest;
+wire [2:0] counter_out;
 
 assign hazard_en = SW[17];
 assign rst = SW[1];
@@ -368,6 +373,8 @@ assign clk = CLOCK_50;
 assign HEX6 = 7'b1111111;
 assign HEX5 = 7'b1111111;
 assign HEX1 = 7'b1111111;
+
+parameter NOP = 0,ADDI=9,LD=10,ST=11,BZ=12;
 
 SSD ssd_IF(pc,HEX7);
 SSD ssd_alu(alu_res,HEX0);
@@ -380,31 +387,32 @@ SSD ssd_cmd(alu_cmd,HEX4);
 
 IF_stage ifs(clk,rst,stall,branch_taken,branch_offset_imm,pc,IF_ID_instr);
 
-ID_stage ids(clk,rst,stall,IF_ID_instr,rs1_addr,rs2_addr,operand_1,operand_2,
+ID_stage ids(clk,rst,stall_mem_ready,frwd_bz,frwd_res_ex,frwd_res_mem,
+	frwd_res_wb,stall,IF_ID_instr,rs1_addr,rs2_addr,operand_1,operand_2,
 	reg_read_1,reg_read_2,alu_cmd,branch_taken,branch_offset_imm,id_ex_store_data,
 	id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en,fsrc1,fsrc2,opcode_id_fw,opcode_id_ex);
 
-EX_stage exs(clk,rst,opcode_id_ex,frwd_op1_mux,frwd_op2_mux,frwd_store_date,frwd_res_ex,frwd_res_mem,
+EX_stage exs(clk,rst,stall_mem_ready,opcode_id_ex,frwd_op1_mux,frwd_op2_mux,frwd_store_date,frwd_res_ex,frwd_res_mem,
 	frwd_res_wb,operand_1,operand_2,alu_cmd,ex_alu_res,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,
 	id_ex_wb_mux,id_ex_wb_en,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en,opcode_ex_mem);
 assign frwd_res_ex = ex_alu_res;
 
 MEM_stage mems(clk,rst,opcode_ex_mem,ex_alu_res,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en,mem_wb_mux,
-	mem_wb_en,mem_op_dest,mem_alu_res,mem_mem_data,opcode_mem_wb);
-assign frwd_res_mem = mem_alu_res;
+	mem_wb_en,mem_op_dest,mem_alu_res,mem_mem_data,opcode_mem_wb,SRAM_DQ,SRAM_ADDR,SRAM_UB_N,SRAM_LB_N,SRAM_WE_N,SRAM_CE_N,SRAM_OE_N,mem_ready,counter_out);
+assign frwd_res_mem = mem_wb_mux ? mem_mem_data:mem_alu_res;
 
 WB_stage wbs(clk,rst,mem_alu_res,mem_mem_data,mem_op_dest,mem_wb_mux,mem_wb_en,reg_wr_dest,reg_wr_data,reg_wr_en);
 assign frwd_res_wb = reg_wr_data;
 
-hazard_detector hzd(clk,rst,opcode_id_fw,opcode_id_ex,opcode_ex_mem,opcode_mem_wb,hazard_en,rs1_addr,rs2_addr,
+hazard_detector hzd(clk,rst,mem_ready,opcode_id_fw,opcode_id_ex,opcode_ex_mem,opcode_mem_wb,hazard_en,rs1_addr,rs2_addr,
 	id_ex_op_dest,ex_op_dest,mem_op_dest,reg_wr_dest,stall);
 
 reg_file rgf(clk,rst,rs1_addr,reg_read_1,rs2_addr,reg_read_2,reg_wr_dest,reg_wr_data,reg_wr_en);
 
 assign id_op_code_is_store = id_ex_mem_write_en;
 assign wb_op_dest = reg_wr_dest;
-forwarding_unit fu(hazard_en,fsrc1,fsrc2,id_op_code_is_store,ex_op_dest,mem_op_dest,wb_op_dest,
-	frwd_op1_mux,frwd_op2_mux,frwd_store_date);
+forwarding_unit fu(opcode_id_fw,opcode_id_ex,opcode_ex_mem,opcode_mem_wb,hazard_en,rs1_addr,rs2_addr,fsrc1,fsrc2,id_op_code_is_store,ex_op_dest,mem_op_dest,wb_op_dest,
+	frwd_op1_mux,frwd_op2_mux,frwd_store_date,frwd_bz);
 
 endmodule
 

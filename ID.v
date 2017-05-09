@@ -2,6 +2,11 @@ module ID_stage
 (
 	input	clk,
 	input	rst,
+	input 	stall_mem_ready,
+	input	[1:0] frwd_bz,
+	input   [15:0] frwd_res_ex,
+  	input   [15:0] frwd_res_mem,
+  	input   [15:0] frwd_res_wb,
 	input 	stall,
 	input 	[15:0]input_instr,
 	output 	[2:0]rs1_addr,
@@ -27,12 +32,16 @@ module ID_stage
 
 parameter NOP = 0,ADDI=9,LD=10,ST=11,BZ=12;
 parameter ALU_CMD_ADD = 0;
+parameter  FORWARD_EX_RES = 2'b10;
+parameter  FORWARD_MEM_RES = 2'b11;
+parameter  FORWARD_WB_RES = 2'b01;
 wire [3:0] opcode;
+wire [15:0]branch_input;
 always @(posedge clk or posedge rst) begin
 	if (rst) begin
 		{alu_cmd, rs1_data_out, rs2_data_out,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en,fsrc1,fsrc2,opcode_reg_out} <=0;
 	end
-	else begin
+	else if(!stall_mem_ready) begin
 		{alu_cmd, rs1_data_out, rs2_data_out,id_ex_store_data,id_ex_op_dest,id_ex_mem_write_en,id_ex_wb_mux,id_ex_wb_en,fsrc2,fsrc1,opcode_reg_out} <=0;
 		if (!branch_taken && !stall && opcode!=NOP)begin
 			opcode_reg_out <= opcode;
@@ -77,11 +86,14 @@ always @(posedge clk or posedge rst) begin
 		end
 	end
 end
+assign branch_input = (frwd_bz == FORWARD_EX_RES) ? frwd_res_ex :
+                  ((frwd_bz == FORWARD_MEM_RES) ? frwd_res_mem :
+                   ((frwd_bz == FORWARD_WB_RES) ? frwd_res_wb:rs1_data_in));
 
 assign opcode = input_instr[15:12];
 assign opcode_out = input_instr[15:12];
 assign branch_offset_imm = input_instr[5:0];
-assign branch_taken = (opcode == BZ) && (rs1_data_in == 0);
+assign branch_taken = (opcode == BZ) && (branch_input == 0);
 assign rs1_addr = input_instr[8:6];
 assign rs2_addr = (opcode == ST) ? input_instr[11:9] : input_instr[5:3];
 endmodule

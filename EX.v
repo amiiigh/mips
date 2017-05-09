@@ -2,6 +2,7 @@ module EX_stage
 (
 	input	clk,
 	input	rst,
+	input   stall_mem_ready,
 	input 	[3:0] opcode_id_ex,
 	input	[1:0] frwd_op1_mux,
 	input	[1:0] frwd_op2_mux,
@@ -35,7 +36,6 @@ assign alu_op1 =(frwd_op1_mux == FORWARD_EX_RES) ? frwd_res_ex :
 assign alu_op2 =(frwd_op2_mux == FORWARD_EX_RES) ? frwd_res_ex :
                   ((frwd_op2_mux == FORWARD_MEM_RES) ? frwd_res_mem :
                    ((frwd_op2_mux == FORWARD_WB_RES) ? frwd_res_wb:rs_2));
-parameter NOP = 0;
 wire [15:0]alu_res_temp;
 always @(posedge clk or posedge rst) begin
 	if (rst) begin
@@ -46,21 +46,17 @@ always @(posedge clk or posedge rst) begin
 		ex_wb_en <= 0;
 		alu_res <= 0;
 		opcode_ex_mem <=0;
-
 	end
-	else begin
-		{opcode_ex_mem,alu_res,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en} <= 0;
-		if(opcode_id_ex == NOP) begin
-			opcode_ex_mem <= opcode_id_ex;
-			alu_res <= alu_res_temp;
-			ex_store_data <= (frwd_store_data == FORWARD_EX_RES) ? frwd_res_ex:
-			((frwd_store_data == FORWARD_MEM_RES )? frwd_res_mem:
-				((frwd_store_data == FORWARD_WB_RES )?frwd_res_wb:id_ex_store_data));
-			ex_op_dest <= id_ex_op_dest;
-			ex_mem_write_en <= id_ex_mem_write_en;
-			ex_wb_mux <= id_ex_wb_mux;
-			ex_wb_en <= id_ex_wb_en;
-		end
+	else if(!stall_mem_ready) begin
+		opcode_ex_mem <= opcode_id_ex;
+		alu_res <= alu_res_temp;
+		ex_store_data <= (frwd_store_data == FORWARD_EX_RES) ? frwd_res_ex:
+		((frwd_store_data == FORWARD_MEM_RES )? frwd_res_mem:
+			((frwd_store_data == FORWARD_WB_RES )?frwd_res_wb:id_ex_store_data));
+		ex_op_dest <= id_ex_op_dest;
+		ex_mem_write_en <= id_ex_mem_write_en;
+		ex_wb_mux <= id_ex_wb_mux;
+		ex_wb_en <= id_ex_wb_en;
 	end
 end
 
