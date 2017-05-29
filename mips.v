@@ -397,7 +397,7 @@ EX_stage exs(clk,rst,stall_mem_ready,opcode_id_ex,frwd_op1_mux,frwd_op2_mux,frwd
 	id_ex_wb_mux,id_ex_wb_en,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en,opcode_ex_mem);
 assign frwd_res_ex = ex_alu_res;
 
-MEM_stage mems(clk,rst,opcode_ex_mem,ex_alu_res,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en,mem_wb_mux,
+MEM_stage mems(clk,rst,opcode_ex_mem,opcode_id_ex,ex_alu_res,ex_store_data,ex_op_dest,ex_mem_write_en,ex_wb_mux,ex_wb_en,mem_wb_mux,
 	mem_wb_en,mem_op_dest,mem_alu_res,mem_mem_data,opcode_mem_wb,SRAM_DQ,SRAM_ADDR,SRAM_UB_N,SRAM_LB_N,SRAM_WE_N,SRAM_CE_N,SRAM_OE_N,mem_ready,counter_out);
 assign frwd_res_mem = mem_wb_mux ? mem_mem_data:mem_alu_res;
 
@@ -405,7 +405,7 @@ WB_stage wbs(clk,rst,mem_alu_res,mem_mem_data,mem_op_dest,mem_wb_mux,mem_wb_en,r
 assign frwd_res_wb = reg_wr_data;
 
 hazard_detector hzd(clk,rst,mem_ready,opcode_id_fw,opcode_id_ex,opcode_ex_mem,opcode_mem_wb,hazard_en,rs1_addr,rs2_addr,
-	id_ex_op_dest,ex_op_dest,mem_op_dest,reg_wr_dest,stall);
+	id_ex_op_dest,ex_op_dest,mem_op_dest,reg_wr_dest,stall,stall_mem_ready);
 
 reg_file rgf(clk,rst,rs1_addr,reg_read_1,rs2_addr,reg_read_2,reg_wr_dest,reg_wr_data,reg_wr_en);
 

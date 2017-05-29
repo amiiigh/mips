@@ -343,7 +343,7 @@ GND                          : E16       : gnd    :                   :         
 VCCIO4                       : E17       : power  :                   : 3.3V    : 4         :                
 ENET_DATA[14]                : E18       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
 GND                          : E19       : gnd    :                   :         :           :                
-GND*                         : E20       :        :                   :         : 4         :                
+TD_CLK27                     : E20       : input  : 3.3-V LVTTL       :         : 4         : N              
 GND_PLL2                     : E21       : gnd    :                   :         :           :                
 GND*                         : E22       :        :                   :         : 5         :                
 GND*                         : E23       :        :                   :         : 5         :                
@@ -396,8 +396,8 @@ GND*                         : G17       :        :                   :         
 GND*                         : G18       :        :                   :         : 4         :                
 VCCA_PLL2                    : G19       : power  :                   : 1.2V    :           :                
 GND_PLL2                     : G20       : gnd    :                   :         :           :                
-TD_CLK27                     : G21       : input  : 3.3-V LVTTL       :         : 5         : N              
-SD_WP_N                      : G22       : input  : 3.3-V LVTTL       :         : 5         : N              
+GND*                         : G21       :        :                   :         : 5         :                
+GND*                         : G22       :        :                   :         : 5         :                
 GPIO_0[12]                   : G23       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
 GPIO_0[13]                   : G24       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
 GPIO_0[15]                   : G25       : bidir  : 3.3-V LVTTL       :         : 5         : Y              
@@ -416,7 +416,7 @@ VGA_R[6]                     : H11       : output : 3.3-V LVTTL       :         
 VGA_R[7]                     : H12       : output : 3.3-V LVTTL       :         : 3         : Y              
 GND                          : H13       : gnd    :                   :         :           :                
 GND                          : H14       : gnd    :                   :         :           :                
-GND*                         : H15       :        :                   :         : 4         :                
+SD_WP_N                      : H15       : input  : 3.3-V LVTTL       :         : 4         : N              
 GND*                         : H16       :        :                   :         : 4         :                
 GND*                         : H17       :        :                   :         : 4         :                
 VCCIO4                       : H18       : power  :                   : 3.3V    : 4         :                
